@@ -16,7 +16,7 @@
 		"export",
 		"interop"
 	],
-	"version": "1.0.3",
+	"version": "1.0.6",
 	"publisher": "zhang-renyang",
 	"icon": "images/icon.png",
 	"repository": "https://github.com/zhangrenyang/esm-cjs-converter",

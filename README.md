@@ -13,6 +13,8 @@ import b from './b.js';
 
 export var c = 1;
 export default 2
+export default class Person { }
+export default function(){}
 ```
 
 After
@@ -51,7 +53,7 @@ export default 2;
 ### 使用方法
 ![](https://static.zhufengpeixun.com/esmcjsconverter_1680840927105.png)
 #### 把 ES modules 转成 CommonJS
-Before
+转换前
 ```js
 import { a } from './a.js';
 import b from './b.js';
@@ -60,7 +62,7 @@ export var c = 1;
 export default 2
 ```
 
-After
+转换后
 ```js
 const {a} = require('./a.js');
 const b = require('./b.js');
@@ -70,7 +72,7 @@ module.exports = 2;
 ```
 
 ####  把  CommonJS 转成 ES modules
-Before
+转换前
 ```js
 const {a} = require('./a.js');
 const b = require('./b.js');
@@ -79,7 +81,7 @@ exports.c = c;
 module.exports = 2;
 ```
 
-After
+转换后
 ```js
 import { a } from "./a.js";
 import b from "./b.js";

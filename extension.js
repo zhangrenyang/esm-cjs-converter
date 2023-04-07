@@ -8,12 +8,11 @@ function activate(context) {
 			const text = vscode.window.activeTextEditor.document.getText();
 			let { code } = babel.transformSync(text, {
 				sourceType: 'module',
-				plugins: [esmCjsPlugin],
+				plugins: [esmCjsPlugin]
 
 			});
 			const end = new vscode.Position(vscode.window.activeTextEditor.document.lineCount + 1, 0);
 			editBuilder.replace(new vscode.Range(new vscode.Position(0, 0), end), code);
-			vscode.commands.executeCommand(`editor.action.formatDocument`);
 		});
 	});
 	context.subscriptions.push(esmoduleToCommonjsDisposable);
@@ -21,11 +20,11 @@ function activate(context) {
 		vscode.window.activeTextEditor.edit(editBuilder => {
 			const text = vscode.window.activeTextEditor.document.getText();
 			let { code } = babel.transformSync(text, {
+				sourceType: 'module',
 				plugins: [cjsEsmPlugin]
 			});
 			const end = new vscode.Position(vscode.window.activeTextEditor.document.lineCount + 1, 0);
 			editBuilder.replace(new vscode.Range(new vscode.Position(0, 0), end), code);
-			vscode.commands.executeCommand(`editor.action.formatDocument`);
 		});
 	});
 	context.subscriptions.push(commonjsToEsmoduleDisposable);

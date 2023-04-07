@@ -20,25 +20,59 @@ module.exports = function (babel) {
 			ExportNamedDeclaration(path) {
 				const { node } = path;
 				if (node.declaration) {
-					const identifierName = node.declaration.declarations[0].id;
-					const newNode = t.expressionStatement(
-						t.assignmentExpression("=",
-							t.memberExpression(
-								t.identifier("exports"),
-								identifierName),
-							identifierName));
-					path.replaceWithMultiple([node.declaration, newNode]);
+					if (t.isVariableDeclaration(node.declaration)) {
+						const newNodes = [];
+						for (let i = 0; i < node.declaration.declarations.length; i++) {
+							const newNode = t.expressionStatement(
+								t.assignmentExpression("=",
+									t.memberExpression(t.identifier("exports"),
+										node.declaration.declarations[i].id),
+									node.declaration.declarations[i].init));
+							newNodes.push(newNode);
+						}
+						path.replaceWithMultiple(newNodes);
+					}
+				} else {
+					if (node.specifiers.length > 0) {
+						const newNodes = [];
+						for (let i = 0; i < node.specifiers.length; i++) {
+							const newNode = t.expressionStatement(
+								t.assignmentExpression("=",
+									t.memberExpression(t.identifier("exports"),
+										node.specifiers[i].exported),
+									node.specifiers[i].local));
+							newNodes.push(newNode);
+						}
+						path.replaceWithMultiple(newNodes);
+					}
 				}
 			},
 			ExportDefaultDeclaration(path) {
 				const { node } = path;
-				//判断如果node.declaration是一个标识符，也就是变量的话
 				if (t.isIdentifier(node.declaration)) {
 					const newNode = t.expressionStatement(t.assignmentExpression("=", t.memberExpression(t.identifier("module"), t.identifier("exports")), node.declaration));
 					path.replaceWith(newNode);
 				} else {
-					const newNode = t.expressionStatement(t.assignmentExpression("=", t.memberExpression(t.identifier("module"), t.identifier("exports")), node.declaration));
-					path.replaceWith(newNode);
+					if (t.isFunctionDeclaration(node.declaration)) {
+						const newNode = t.expressionStatement(t.assignmentExpression("=", t.memberExpression(t.identifier("module"), t.identifier("exports")), t.functionExpression(null, node.declaration.params, node.declaration.body, node.declaration.generator, node.declaration.async)));
+						path.replaceWith(newNode);
+					} else if (t.isClassDeclaration(node.declaration)) {
+						const newNode = t.expressionStatement(
+							t.assignmentExpression("=",
+								t.memberExpression(
+									t.identifier("module"), t.identifier("exports")),
+								t.classExpression(node.declaration.id,
+									node.declaration.superClass,
+									node.declaration.body, node.declaration.decorators
+								)));
+						path.replaceWith(newNode);
+					} else {
+						const newNode = t.expressionStatement(
+							t.assignmentExpression("=",
+								t.memberExpression(t.identifier("module"), t.identifier("exports")),
+								node.declaration));
+						path.replaceWith(newNode);
+					}
 				}
 			}
 		}
