@@ -1,0 +1,78 @@
+{
+	"name": "esm-cjs-converter",
+	"displayName": "esm-cjs-converter",
+	"description": "Convert ES modules to CommonJS, or convert CommonJS to ES modules.",
+	"keywords": [
+		"esmodule",
+		"commonjs",
+		"module",
+		"transform",
+		"conversion",
+		"esm",
+		"cjs",
+		"javascript",
+		"bundler",
+		"import",
+		"export",
+		"interop"
+	],
+	"version": "1.0.3",
+	"publisher": "zhang-renyang",
+	"icon": "images/icon.png",
+	"repository": "https://github.com/zhangrenyang/esm-cjs-converter",
+	"engines": {
+		"vscode": "^1.49.0"
+	},
+	"categories": [
+		"Formatters"
+	],
+	"main": "./extension.js",
+	"activationEvents": [
+		"onCommand:extension.esmoduleToCommonjs",
+		"onCommand:extension.commonjsToEsmodule"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.esmoduleToCommonjs",
+				"title": "esmoduleToCommonjs"
+			},
+			{
+				"command": "extension.commonjsToEsmodule",
+				"title": "commonjsToEsmodule"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "extension.esmoduleToCommonjs",
+				"key": "ctrl+f11",
+				"mac": "cmd+f11",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "extension.commonjsToEsmodule",
+				"key": "ctrl+f12",
+				"mac": "cmd+f12",
+				"when": "commonjsToEsmodule"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorFocus",
+					"command": "extension.esmoduleToCommonjs",
+					"group": "navigation"
+				},
+				{
+					"when": "editorFocus",
+					"command": "extension.commonjsToEsmodule",
+					"group": "navigation"
+				}
+			]
+		}
+	},
+	"scripts": {},
+	"dependencies": {
+		"@babel/core": "^7.21.4"
+	}
+}
